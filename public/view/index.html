@@ -29,17 +29,9 @@
         </div>
         <p class="lead">
         	<div class="row">
-			  <div class="col-lg-6" id="inputForm">
-			    <div class="input-group">
-			      <input type="text" id="numOfDiscs" class="form-control">
-			      <span class="input-group-btn">
-			        <button class="btn btn-default" type="button">Go!</button>
-			      </span>
-			    </div><!-- /input-group -->
 			  </div><!-- /.col-lg-6 -->
 			</div><!-- /.row -->
         </p>
-
       </div>
     </div>
 
@@ -52,18 +44,33 @@
     <script type="text/javascript" src="main.min.js"></script>
     <script type="text/javascript">
     var towerView = Backbone.View.extend({
-    	el: ".container",
+    	el: ".row",
 
     	initialize: function(options) {
 			console.log('init Tower view');
-			console.log(options.discs_num);
+			this.render(options.discs_num);
 		},
 
-		render: function() {
+		render: function(discs_num) {
+			$(this.el).html('<p>You Choose to see what happen if we have ' + discs_num + ' Discs.</p>');
+			$(this.el).append('<ul id="Steps"></ul>');
+			this.hanoiLogic(discs_num, 'Source','Aux','Destination');
 
+		},
+
+		hanoiLogic: function(disc, src, aux, dst){
+			console.log('hanoi function...');
+			if (disc > 0)
+			{
+		        this.hanoiLogic(disc - 1, src, dst, aux);
+		        $('#Steps').append('<li>Move disc ' + disc +
+		                ' from ' + src + ' to ' + dst + '</li>');
+		        this.hanoiLogic(disc - 1, aux, src, dst);
+	   		}
 		}
 
     });
+
 
     var inputFormView = Backbone.View.extend({
     	
@@ -75,15 +82,17 @@
 
 		initialize: function() {
 			console.log('init view');
+			this.render();
 		},
 
 		render: function() {
-
+			$('.row').html('<div class="col-lg-6" id="inputForm"><div class="input-group"><input type="text" id="numOfDiscs" class="form-control"><span class="input-group-btn"><button class="btn btn-default" type="button">Go!</button></span></div>');
+			
 		},
 
 		getDiscsNum: function(ev){
 			ev.preventDefault();
-			if (isNaN($('#numOfDiscs').val())){
+			if (isNaN($('#numOfDiscs').val()) || !$('#numOfDiscs').val()){
 				alert('must be num');
 			}else{
 				var num = parseInt($('#numOfDiscs').val(), 10);
@@ -92,15 +101,23 @@
 		},
 
 		hideInputForm: function(num){
-			$('#inputForm').hide();
 			var Tower = new towerView({discs_num: num});
 		}
 
     });
 
-    $(document).ready(function(){
-    	var view = new inputFormView();	
-    })
+    $(function() {
+    	HanoiTower = Backbone.Collection.extend({
+    		initialize: function(){
+	        	this.bind("change", function( model ){
+					view.render( model );
+	        	});
+    		}
+    	});
+
+    	var view = new inputFormView({el: 'body'});	
+
+    });
     
     </script>
   </body>
