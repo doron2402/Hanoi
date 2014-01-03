@@ -28,6 +28,9 @@
           <h1>Tower of Hanoi</h1>
         </div>
         <p class="lead">
+        	<div class="panel panel-default hanoi-tower-table">
+ 				<div class="panel-heading">Hanoi Tower</div>
+ 			</div>
         	<div class="row">
 			  </div><!-- /.col-lg-6 -->
 			</div><!-- /.row -->
@@ -43,8 +46,10 @@
 
     <script type="text/javascript" src="main.min.js"></script>
     <script type="text/javascript">
+
     var towerView = Backbone.View.extend({
     	el: ".row",
+    	TableObj: {},
 
     	initialize: function(options) {
 			console.log('init Tower view');
@@ -54,19 +59,62 @@
 		render: function(discs_num) {
 			$(this.el).html('<p>You Choose to see what happen if we have ' + discs_num + ' Discs.</p>');
 			$(this.el).append('<ul id="Steps"></ul>');
+			this.drawFirstTable(discs_num);
 			this.hanoiLogic(discs_num, 'Source','Aux','Destination');
+		},
 
+		drawFirstTable: function(numOfDiscs){
+
+			var Table = '<table class="table">';
+			Table += '<thead><tr><th>Source</th><th>Aux</th><th>Destination</th></tr></thead>'
+			for (var i=0; i<numOfDiscs;i++){
+				Table += '<tr><td class="A-' + i +'"></td><td class="B-' + i +'"></td><td class="C-' + i +'"></td><tr>';
+			}
+			
+			Table += '</table>';
+
+			$('.hanoi-tower-table').append(Table);
+
+			this.TableObj = {Source: numOfDiscs, Aux: 0, Destination: 0}; 
+			this.drawTable(this.TableObj);
 		},
 
 		hanoiLogic: function(disc, src, aux, dst){
-			console.log('hanoi function...');
+
+			var TimeStamp = parseInt((new Date().getTime() + disc)/disc,10);
+			
 			if (disc > 0)
 			{
 		        this.hanoiLogic(disc - 1, src, dst, aux);
-		        $('#Steps').append('<li>Move disc ' + disc +
+		        $('#Steps').append('<li class="disc-'+ disc + '">Move disc ' + disc +
 		                ' from ' + src + ' to ' + dst + '</li>');
+		        this.TableObj[src] -= 1;
+		        this.TableObj[dst] += 1;
+		      	console.log(this.TableObj);
 		        this.hanoiLogic(disc - 1, aux, src, dst);
 	   		}
+
+		},
+
+		drawTable: function(Obj){
+			if (Obj.Source >= 0){
+				
+				for (var i = 0; i < Obj.Source; i++) {
+					$('td.A-' + i).css('background-color','black');	
+				};
+			}
+
+			if (Obj.Aux >= 0){
+				for (var i = 0; i < Obj.Aux; i++) {
+					$('td.B-' + i).css('background-color','black');
+				}
+			}
+
+			if (Obj.Destination >= 0){
+				for (var i = 0; i < Obj.Destination; i++) {
+					$('td.C-' + i).css('background-color','black');
+				}
+			}
 		}
 
     });
