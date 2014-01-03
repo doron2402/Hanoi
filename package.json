@@ -1,0 +1,35 @@
+{
+  "name": "hanoi",
+  "version": "0.0.1",
+  "description": "hanoi tower alg'",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doron2402/Hanoi.git"
+  },
+  "keywords": [
+    "hanoi",
+    "tower",
+    "algorithem"
+  ],
+  "author": "Doron Segal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/doron2402/Hanoi/issues"
+  },
+  "homepage": "https://github.com/doron2402/Hanoi",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-nodemon": "~0.1.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "bower": "~1.2.8"
+  }
+}

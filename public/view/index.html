@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hanoi Tower">
+    <meta name="author" content="Doron Segal">
+
+    <title>Hanoi Tower</title>
+    <link rel="stylesheet" type="text/css" href="style.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Begin page content -->
+      <div class="container">
+        <div class="page-header">
+          <h1>Tower of Hanoi</h1>
+        </div>
+        <p class="lead">
+        	<div class="row">
+			  <div class="col-lg-6" id="inputForm">
+			    <div class="input-group">
+			      <input type="text" id="numOfDiscs" class="form-control">
+			      <span class="input-group-btn">
+			        <button class="btn btn-default" type="button">Go!</button>
+			      </span>
+			    </div><!-- /input-group -->
+			  </div><!-- /.col-lg-6 -->
+			</div><!-- /.row -->
+        </p>
+
+      </div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="text-muted">Simple tutorial that explain the tower of hanoi algorithem By <a href="http://segaldoron.com">Doron Segal</a></p>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="main.min.js"></script>
+    <script type="text/javascript">
+    var towerView = Backbone.View.extend({
+    	el: ".container",
+
+    	initialize: function(options) {
+			console.log('init Tower view');
+			console.log(options.discs_num);
+		},
+
+		render: function() {
+
+		}
+
+    });
+
+    var inputFormView = Backbone.View.extend({
+    	
+    	el: ".container",
+
+    	events: {
+			"click button": "getDiscsNum",
+		},
+
+		initialize: function() {
+			console.log('init view');
+		},
+
+		render: function() {
+
+		},
+
+		getDiscsNum: function(ev){
+			ev.preventDefault();
+			if (isNaN($('#numOfDiscs').val())){
+				alert('must be num');
+			}else{
+				var num = parseInt($('#numOfDiscs').val(), 10);
+				this.hideInputForm(num);
+			}
+		},
+
+		hideInputForm: function(num){
+			$('#inputForm').hide();
+			var Tower = new towerView({discs_num: num});
+		}
+
+    });
+
+    $(document).ready(function(){
+    	var view = new inputFormView();	
+    })
+    
+    </script>
+  </body>
+</html>
