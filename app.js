@@ -3,7 +3,7 @@ var http = require('http'),
  	url = require('url'),
 	path = require('path'),
     fs = require('fs'),
-    port = 8000,
+    port = process.env.PORT || 8000,
     mimeTypes = {
     "html": "text/html",
     "jpeg": "image/jpeg",
@@ -11,6 +11,11 @@ var http = require('http'),
     "png": "image/png",
     "js": "text/javascript",
     "css": "text/css"};
+
+
+setInterval(function(){
+  console.log('memory', process.memoryUsage())
+}, 1000 * 300);
 
 // Configure our HTTP server to respond with Hello World to all requests.
 var server = http.createServer(function (request, response) {
@@ -55,7 +60,7 @@ var server = http.createServer(function (request, response) {
             response.end();
             return;
         }
-        
+
         var fileStream = fs.createReadStream(file_to_use);
        	response.writeHead(200,header_to_use); 
         fileStream.pipe(response);
