@@ -1,10 +1,12 @@
 ## Hanoi Tower
 
+http://learn-hanoi.herokuapp.com/
+
 ### How to run:
-1. npm i
-2. bower i
-3. grunt
-4. npm start
+1. `npm i`
+2. `bower i`
+3. `grunt`
+4. `npm start`
 
 
 ### Why
