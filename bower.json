@@ -8,6 +8,6 @@
     "jquery": "1.10.2",
     "bootstrap": "3.0.3",
     "backbone": "~1.1.0",
-    "underscore": "~1.5.2",
+    "underscore": "~1.5.2"
   }
 }
