@@ -47,13 +47,14 @@
     <script type="text/javascript" src="main.min.js"></script>
     <script type="text/javascript">
 
-    var towerView = Backbone.View.extend({
+	    var towerView = Backbone.View.extend({
     	el: ".row",
     	TableObj: {},
 
     	initialize: function(options) {
 			console.log('init Tower view');
 			this.render(options.discs_num);
+			this.drawPlayButton();
 		},
 
 		render: function(discs_num) {
@@ -65,7 +66,7 @@
 
 		drawFirstTable: function(numOfDiscs){
 
-			var Table = '<table class="table">';
+			var Table = '<table class="table table-bordered table-condensed">';
 			Table += '<thead><tr><th>Source</th><th>Aux</th><th>Destination</th></tr></thead>'
 			for (var i=0; i<numOfDiscs;i++){
 				Table += '<tr><td class="A-' + i +'"></td><td class="B-' + i +'"></td><td class="C-' + i +'"></td><tr>';
@@ -79,6 +80,11 @@
 			this.drawTable(this.TableObj);
 		},
 
+		switchTower: function(src, dst){
+			$(src).css('background-color','white');
+			$(dst).css('background-color','black');
+		},
+
 		hanoiLogic: function(disc, src, aux, dst){
 
 			var TimeStamp = parseInt((new Date().getTime() + disc)/disc,10);
@@ -86,7 +92,7 @@
 			if (disc > 0)
 			{
 		        this.hanoiLogic(disc - 1, src, dst, aux);
-		        $('#Steps').append('<li class="disc-'+ disc + '">Move disc ' + disc +
+		        $('#Steps').append('<li class="disc-'+ disc + ' ' + src + '-'+dst+'">Move disc ' + disc +
 		                ' from ' + src + ' to ' + dst + '</li>');
 		        this.TableObj[src] -= 1;
 		        this.TableObj[dst] += 1;
@@ -115,6 +121,59 @@
 					$('td.C-' + i).css('background-color','black');
 				}
 			}
+
+		},
+
+		drawPlayButton: function(){
+			$('.hanoi-tower-table').append('<button type="button" id="Play" class="btn btn-primary">Play</button>');
+
+			this.addEventForButton();
+			
+		},
+
+		addEventForButton: function(){
+			var that = this;
+			$('button#Play').click(function(e){
+				e.preventDefault();
+				that.playShow();
+			})
+		},
+
+		playShow: function(){
+			//Get Process
+			var steps = [];
+			$('ul#Steps').children().each(function(k,v){
+				
+				var disc = $(v).attr('class').split(' ')[0].split('-')[1];
+				var src = $(v).attr('class').split(' ')[1].split('-')[0]
+				var dst = $(v).attr('class').split(' ')[1].split('-')[1];
+
+				steps.push({
+					text: 'Step ' + (k+1) + ') ' + $(v).text(),
+					disc: disc,
+					src: src,
+					dst: dst
+				});
+				
+			});
+			
+
+			var run = function(i){
+				if (steps[i].text){
+					$('p.lead').html(steps[i].text);
+					console.log(steps[i]);
+
+					setTimeout(function() {
+    					i++;
+    					run(i);
+					}, 2500);	
+				}
+			};
+
+			var i = 0;
+			run(i);
+			
+
 		}
 
     });
@@ -125,7 +184,7 @@
     	el: ".container",
 
     	events: {
-			"click button": "getDiscsNum",
+			"click button#Submit-Num": "getDiscsNum",
 		},
 
 		initialize: function() {
@@ -134,7 +193,7 @@
 		},
 
 		render: function() {
-			$('.row').html('<div class="col-lg-6" id="inputForm"><div class="input-group"><input type="text" id="numOfDiscs" class="form-control"><span class="input-group-btn"><button class="btn btn-default" type="button">Go!</button></span></div>');
+			$('.row').html('<div class="col-lg-6" id="inputForm"><div class="input-group"><input type="text" id="numOfDiscs" class="form-control"><span class="input-group-btn"><button class="btn btn-default" id="Submit-Num" type="button">Go!</button></span></div>');
 			
 		},
 
