@@ -1,1 +1,1 @@
-web: npm i && bower i && grunt && node app.js
+web: npm i && bower i && node app.js
