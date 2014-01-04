@@ -50,9 +50,10 @@
 	    var towerView = Backbone.View.extend({
     	el: ".row",
     	TableObj: {},
+    	NumOfDiscs: null,
 
     	initialize: function(options) {
-			console.log('init Tower view');
+    		this.NumOfDiscs = options.discs_num;
 			this.render(options.discs_num);
 			this.drawPlayButton();
 		},
@@ -81,8 +82,9 @@
 		},
 
 		switchTower: function(src, dst){
-			$(src).css('background-color','white');
-			$(dst).css('background-color','black');
+			console.log('Moving from: %s, To: %s', src, dst);
+			$('td.' + src).css('background-color','white');
+			$('td.' + dst).css('background-color','black');
 		},
 
 		hanoiLogic: function(disc, src, aux, dst){
@@ -96,7 +98,6 @@
 		                ' from ' + src + ' to ' + dst + '</li>');
 		        this.TableObj[src] -= 1;
 		        this.TableObj[dst] += 1;
-		      	console.log(this.TableObj);
 		        this.hanoiLogic(disc - 1, aux, src, dst);
 	   		}
 
@@ -141,7 +142,11 @@
 
 		playShow: function(){
 			//Get Process
-			var steps = [];
+
+			var steps = [],
+				that = this,
+				discs = {};
+
 			$('ul#Steps').children().each(function(k,v){
 				
 				var disc = $(v).attr('class').split(' ')[0].split('-')[1];
@@ -159,20 +164,64 @@
 			
 
 			var run = function(i){
-				if (steps[i].text){
+				if (steps[i]){
 					$('p.lead').html(steps[i].text);
 					console.log(steps[i]);
+					var ColSrc = null;
+					switch(steps[i].src){
+						case 'Source':
+							ColSrc = 'A';
+							break;
+						case 'Aux':
+							ColSrc = 'B';
+							break;
+						case 'Destination':
+							ColSrc = 'C';
+							break;
+					};
 
+					var ColDst = null;
+					switch(steps[i].dst){
+						case 'Source':
+							ColDst = 'A';
+							break;
+						case 'Aux':
+							ColDst = 'B';
+							break;
+						case 'Destination':
+							ColDst = 'C';
+							break;
+					}
+
+					var prev = ColSrc + '-' + (that.NumOfDiscs - steps[i].disc),
+						next = ColDst + '-' + (that.NumOfDiscs - steps[i].disc);
+
+					that.findNextAvailablePositionForDisc(ColDst);
+
+					discs[steps[i].disc] = {prev: prev, next: next};
+					
 					setTimeout(function() {
     					i++;
     					run(i);
-					}, 2500);	
+					}, 2500);
 				}
 			};
 
 			var i = 0;
 			run(i);
 			
+		},
+
+		//Col could be A,B,C
+		findNextAvailablePositionForDisc: function(Col){
+			for (var i=0; i<this.NumOfDiscs; i++){
+				console.log($('td.'+Col+'-'+i).css('background-color'));
+				if ($('td.'+Col+'-'+i).css('background-color') == 'white'){
+					
+					return i;
+				}
+
+			}
 
 		}
 
@@ -188,7 +237,6 @@
 		},
 
 		initialize: function() {
-			console.log('init view');
 			this.render();
 		},
 
