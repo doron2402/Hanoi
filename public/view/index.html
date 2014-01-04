@@ -136,13 +136,24 @@
 			var that = this;
 			$('button#Play').click(function(e){
 				e.preventDefault();
+				//Restart
+				that.restartTable();
+				
 				that.playShow();
 			})
 		},
 
-		playShow: function(){
-			//Get Process
+		restartTable: function(){
+			for (var i = 0; i < this.NumOfDiscs; i++) {
+				$('td.A-'+ i).css('background-color','black');
+				$('td.B-'+ i).css('background-color','white');
+				$('td.C-'+ i).css('background-color','white');
+			};
+		},
 
+		playShow: function(){
+			
+			//Get Process
 			var steps = [],
 				that = this,
 				discs = {};
@@ -216,8 +227,8 @@
 		//Col could be A,B,C
 		findNextAvailablePositionForDisc: function(Col){
 			for (var i=0; i<this.NumOfDiscs; i++){
-				
-				if ($('td.'+Col+'-'+i).css('background-color') == 'rgba(0, 0, 0, 0)'){
+				console.log($('td.'+Col+'-'+i).css('background-color'));
+				if ($('td.'+Col+'-'+i).css('background-color') == 'rgba(0, 0, 0, 0)' || $('td.'+Col+'-'+i).css('background-color') == 'rgb(255, 255, 255)' ){
 					return i;
 				}
 
