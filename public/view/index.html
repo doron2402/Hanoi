@@ -194,12 +194,13 @@
 					}
 
 					var prev = ColSrc + '-' + (that.NumOfDiscs - steps[i].disc),
-						next = ColDst + '-' + (that.NumOfDiscs - steps[i].disc);
-
-					that.findNextAvailablePositionForDisc(ColDst);
+						next = ColDst + '-' + that.findNextAvailablePositionForDisc(ColDst);
 
 					discs[steps[i].disc] = {prev: prev, next: next};
 					
+					that.switchTower(discs[steps[i].disc].prev,discs[steps[i].disc].next);
+					console.log(discs);
+
 					setTimeout(function() {
     					i++;
     					run(i);
@@ -215,9 +216,8 @@
 		//Col could be A,B,C
 		findNextAvailablePositionForDisc: function(Col){
 			for (var i=0; i<this.NumOfDiscs; i++){
-				console.log($('td.'+Col+'-'+i).css('background-color'));
-				if ($('td.'+Col+'-'+i).css('background-color') == 'white'){
-					
+				
+				if ($('td.'+Col+'-'+i).css('background-color') == 'rgba(0, 0, 0, 0)'){
 					return i;
 				}
 
