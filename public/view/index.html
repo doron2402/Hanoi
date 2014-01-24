@@ -86,7 +86,9 @@
 			$('td.' + src).css('background-color','white');
 			$('td.' + dst).css('background-color','black');
 		},
-
+		/*
+			This is the most important function
+		*/
 		hanoiLogic: function(disc, src, aux, dst){
 
 			var TimeStamp = parseInt((new Date().getTime() + disc)/disc,10);
